@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+  {%  block title %}Login{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/templatemo.css' %}">
+    <link rel="stylesheet" href="{% static '/css/custom.css' %}">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{% static '/css/fontawesome.min.css' %}">
+
+    <!-- Load map styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+
+    {% endblock %}
+{% block content %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .login-box {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 50px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 8px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .social-login-buttons {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .social-login-buttons button {
+      margin-bottom: 10px;
+    }
+  </style>
+
+<div class="login-box">
+  <h2>Login</h2>
+  <form method="POST">
+      {% csrf_token %}
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <div class="form-group">
+      <a class="forgot-password-link" href="/forgot_password">Forgot Password</a>
+    </div>
+    <div class="form-group">
+      <button type="submit" >Login</button>
+    </div>
+    <div class="social-login-buttons">
+      <a class="btn-outline-dark" href="/accounts/register">You do not have an account yet?</a>
+    </div>
+  </form>
+</div>
+
+
+    {%  endblock %}
