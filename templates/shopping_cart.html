@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block title %}Login to our system{% endblock %}
 
 {% block css %}
@@ -17,7 +18,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">Shopping Cart
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Cart</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
         <div class="row mb-5">
           <form class="col-md-12" method="post">
             <div class="site-blocks-table">
@@ -32,14 +42,15 @@
                     <th class="product-total">Total</th>
                     <th class="product-remove">Remove</th>
                   </tr>
+                </thead>
                 <tbody>
                 {% for product in shopping_cart_products %}
                   <tr>
-                    <td class="product-id">
-                      <span>{{ product.index }}</span>
-                    </td>
                     <td class="product-thumbnail">
-                      <img src="{{ product.image.image.url }}" alt="Image" class="img-fluid">
+                      <img src="{{ product.image.image.url }}" alt="Image" class="img-fluid" style="width: 200px; height: 200px; !important;">
+                    </td>
+                    <td class="product-id">
+                        <span>{{ product.index }}</span>
                     </td>
                     <td class="product-name">
                       <h2 class="h5 text-black">{{ product.product.title }}</h2>
@@ -48,46 +59,117 @@
                     <td>
                       <div class="input-group mb-3" style="max-width: 120px;">
                         <div class="input-group-prepend">
-                          <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                          <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="decrement_count({{ product.id }}, {{ product.product.price }})">-</button>
                         </div>
-                        <input type="text" class="form-control text-center" value="{{ product.count }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                        <input id="product_count_{{ product.id }}" oninput="change_count({{ product.id }}, {{ product.product.price }})" type="text" class="form-control text-center" value="{{ product.count }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                         <div class="input-group-append">
-                          <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                          <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="increment_count({{ product.id }}, {{ product.product.price }})">+</button>
                         </div>
                       </div>
 
                     </td>
-                    <td>${{ product.total }}</td>
+                    <td>
+                        <span id="total_count_{{ product.id }}">${% total product.count product.product.price %}</span>
+                    </td>
                     <td>
                         <form method="post">
                             {% csrf_token %}
                             <input type="hidden" name="shopping_cart_id" value="{{ product.id }}">
                             <button href="#" class="btn btn-primary btn-sm">X</button>
                         </form>
-
                     </td>
                   </tr>
                 {% endfor %}
+{#                  <tr>#}
+{#                    <td class="product-thumbnail">#}
+{#                      <img src="{% static 'images/cloth_2.jpg' %}" alt="Image" class="img-fluid">#}
+{#                    </td>#}
+{#                    <td class="product-name">#}
+{#                      <h2 class="h5 text-black">Polo Shirt</h2>#}
+{#                    </td>#}
+{#                    <td>$49.00</td>#}
+{#                    <td>#}
+{#                      <div class="input-group mb-3" style="max-width: 120px;">#}
+{#                        <div class="input-group-prepend">#}
+{#                          <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>#}
+{#                        </div>#}
+{#                        <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">#}
+{#                        <div class="input-group-append">#}
+{#                          <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>#}
+{#                        </div>#}
+{#                      </div>#}
+{##}
+{#                    </td>#}
+{#                    <td>$49.00</td>#}
+{#                    <td><a href="#" class="btn btn-primary btn-sm">X</a></td>#}
+{#                  </tr>#}
+
                 </tbody>
               </table>
             </div>
           </form>
         </div>
+      </div>
     </div>
-        {% endblock %}
+{% endblock %}
+
 
 {% block js %}
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
 
-    <!-- Template Javascript -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/main2.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        const increment_count =(id, price) => {
+            fetch('http://127.0.0.1:8000/increment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id': id
+                })
+            }).then(rsp=>rsp.json()).then(response=>{
+                let  count = document.getElementById('product_count_'+id).value
+                document.getElementById('total_count_'+id).innerHTML = '$' + `${parseInt(price) * parseInt(count)}`
+                console.log(response)
+            })
+        }
+        const decrement_count =(id, price) => {
+            fetch('http://127.0.0.1:8000/decrement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id': id
+                })
+            }).then(rsp=>rsp.json()).then(response=>{
+                let  count = document.getElementById('product_count_'+id).value
+                document.getElementById('total_count_'+id).innerHTML = '$' + `${parseInt(price) * parseInt(count)}`
+                console.log(response)
+            })
+        }
+        const change_count =(id, price) => {
+            fetch('http://127.0.0.1:8000/change', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id': id,
+                    'product_count': document.getElementById('product_count_'+id).value
+                })
+            }).then(rsp=>rsp.json()).then(response=>{
+                let count = document.getElementById('product_count_'+id).value
+                document.getElementById('total_count_'+id).innerHTML = '$' + `${parseInt(price) * parseInt(count)}`
+                console.log(response)
+            })
+        }
+    </script>
 {% endblock %}

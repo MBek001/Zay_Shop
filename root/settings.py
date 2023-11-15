@@ -44,7 +44,8 @@ INSTALLED_APPS = [
 
     # custom
     'main',
-    'dotenv'
+    'dotenv',
+    'accounts'
 ]
 
 MIDDLEWARE = [

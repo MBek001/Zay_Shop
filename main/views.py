@@ -118,5 +118,50 @@ class AddproductView(View):
 
         return redirect('/add-product')
 
+class IncrementCountAPIView(View):
+
+    def post(self, request):
+        try:
+            json_data = json.loads(request.body.decode('utf-8'))
+            shopping_cart_id = json_data.get('id')
+            shopping_cart = ShoppingCart.objects.get(pk=shopping_cart_id)
+            shopping_cart.count +=1
+            shopping_cart.save()
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': e})
+        return JsonResponse({'success': True})
+
+
+class DecrementCountAPIView(View):
+
+    def post(self, request):
+        try:
+            json_data = json.loads(request.body.decode('utf-8'))
+            shopping_cart_id = json_data.get('id')
+            shopping_cart = ShoppingCart.objects.get(pk=shopping_cart_id)
+            if shopping_cart.count > 0:
+                shopping_cart.count -= 1
+                shopping_cart.save()
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': e})
+        return JsonResponse({'success': True})
+
+
+class ChangeCountAPIView(View):
+
+    def post(self, request):
+        try:
+            json_data = json.loads(request.body.decode('utf-8'))
+            shopping_cart_id = json_data.get('id')
+            product_count = json_data.get('product_count')
+
+            shopping_cart = ShoppingCart.objects.get(pk=shopping_cart_id)
+            if product_count is not None:
+                shopping_cart.count = product_count
+                shopping_cart.save()
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': e})
+        return JsonResponse({'success': True})
+
 
 
